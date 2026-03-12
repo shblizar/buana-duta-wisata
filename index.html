@@ -970,7 +970,7 @@
           <div class="kontak-item-icon">✉️</div>
           <div class="kontak-item-text">
             <strong>Email</strong>
-            <span>bdwisata@gmail.com</span>  <!-- ← EDIT -->
+            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8defe9fae4feecf9eccdeae0ece4e1a3eee2e0">[email&#160;protected]</a></span>  <!-- ← EDIT -->
           </div>
         </div>
         <div class="kontak-item">
@@ -1063,7 +1063,17 @@
   </svg>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // ═══════════════════════════════════════
+  // KONFIGURASI SUPABASE — jangan diubah
+  // ═══════════════════════════════════════
+  const SUPABASE_URL  = 'https://nxiqgmwnuzhnubwamnjp.supabase.co';
+  const SUPABASE_KEY  = 'sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
   // ── Navbar scroll effect ──
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
@@ -1085,25 +1095,56 @@
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // ── Kirim via WhatsApp ──
-  // ↓ EDIT nomor WA tujuan di sini
+  // ── Kirim via WhatsApp + Simpan ke Database ──
   const NOMOR_WA = '6287893033314';
 
-  function kirimWA() {
-    const nama    = document.querySelectorAll('.form-group input')[0].value;
-    const wa      = document.querySelectorAll('.form-group input')[1].value;
-    const paket   = document.querySelectorAll('.form-group select')[0].value;
-    const jamaah  = document.querySelectorAll('.form-group select')[1].value;
-    const pesan   = document.querySelector('.form-group textarea').value;
+  async function kirimWA() {
+    const nama   = document.querySelectorAll('.form-group input')[0].value;
+    const wa     = document.querySelectorAll('.form-group input')[1].value;
+    const paket  = document.querySelectorAll('.form-group select')[0].value;
+    const jamaah = document.querySelectorAll('.form-group select')[1].value;
+    const pesan  = document.querySelector('.form-group textarea').value;
 
     if (!nama || !wa) {
       alert('Mohon isi nama dan nomor WhatsApp terlebih dahulu.');
       return;
     }
 
+    // ── Simpan ke Supabase ──
+    const { error } = await supabase.from('pendaftaran').insert([{
+      nama:           nama,
+      whatsapp:       wa,
+      paket:          paket,
+      jumlah_jamaah:  jamaah,
+      pesan:          pesan,
+      tanggal_daftar: new Date().toISOString()
+    }]);
+
+    if (error) {
+      console.error('Gagal simpan:', error);
+    } else {
+      console.log('Data berhasil disimpan ke database!');
+    }
+
+    // ── Kirim ke WhatsApp ──
     const teks = encodeURIComponent(
       `Assalamu'alaikum, saya ingin mendaftar:\n\n` +
       `👤 Nama: ${nama}\n` +
       `📱 WA: ${wa}\n` +
       `📦 Paket: ${paket || 'Belum dipilih'}\n` +
-      ` 
+      `👥 Jamaah: ${jamaah}\n` +
+      `💬 Pesan: ${pesan || '-'}\n\n` +
+      `Mohon informasi lebih lanjut. Jazakallahu khairan.`
+    );
+    window.open(`https://wa.me/${NOMOR_WA}?text=${teks}`, '_blank');
+
+    // ── Reset form ──
+    document.querySelectorAll('.form-group input').forEach(i => i.value = '');
+    document.querySelectorAll('.form-group select').forEach(s => s.selectedIndex = 0);
+    document.querySelector('.form-group textarea').value = '';
+    alert('✅ Data berhasil disimpan! WhatsApp akan terbuka sekarang.');
+
+  }
+</script>
+</body>
+</html>
