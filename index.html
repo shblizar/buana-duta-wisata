@@ -1003,15 +1003,15 @@
 
       <div class="form-group">
         <label>Nama Lengkap</label>
-        <input id="inp_nama" type="text" placeholder="Masukkan nama lengkap Anda"/>
+        <input id="inp_nama" type="text" placeholder="Masukkan nama lengkap Anda" oninput="updateWALink()"/>
       </div>
       <div class="form-group">
         <label>Nomor WhatsApp</label>
-        <input id="inp_wa" type="tel" placeholder="+62 812-xxxx-xxxx"/>
+        <input id="inp_wa" type="tel" placeholder="+62 812-xxxx-xxxx" oninput="updateWALink()"/>
       </div>
       <div class="form-group">
         <label>Pilih Paket</label>
-        <select id="inp_paket">
+        <select id="inp_paket" onchange="updateWALink()">
           <option value="">-- Pilih Paket --</option>
           <option>Umroh Paket Hemat – Rp 25 Juta</option>
           <option>Umroh Paket Premium – Rp 35 Juta</option>
@@ -1021,7 +1021,7 @@
       </div>
       <div class="form-group">
         <label>Jumlah Jamaah</label>
-        <select id="inp_jamaah">
+        <select id="inp_jamaah" onchange="updateWALink()">
           <option>1 orang</option>
           <option>2 orang (pasangan)</option>
           <option>3–5 orang (keluarga)</option>
@@ -1030,9 +1030,9 @@
       </div>
       <div class="form-group">
         <label>Pesan / Pertanyaan (Opsional)</label>
-        <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
+        <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..." oninput="updateWALink()"></textarea>
       </div>
-      <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;" onmousedown="bukaWA(event)">Kirim via WhatsApp ✉</a>
+      <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">Kirim via WhatsApp ✉</a>
     </div>
   </div>
 </section>
@@ -1102,17 +1102,14 @@
   // ── Kirim via WhatsApp + Simpan ke Database ──
   const NOMOR_WA = '6287893033314';
 
-  function bukaWA(e) {
-    const nama   = document.getElementById('inp_nama').value.trim();
-    const wa     = document.getElementById('inp_wa').value.trim();
-    const paket  = document.getElementById('inp_paket').value;
-    const jamaah = document.getElementById('inp_jamaah').value;
-    const pesan  = document.getElementById('inp_pesan').value.trim();
-
-    if (!nama || !wa) { return; }
-
-    const teks = "Assalamu'alaikum, saya ingin mendaftar:\n\nNama: " + nama + "\nWA: " + wa + "\nPaket: " + (paket||'Belum dipilih') + "\nJamaah: " + jamaah + "\nPesan: " + (pesan||'-') + "\n\nJazakallahu khairan.";
-    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
+  function updateWALink() {
+    var nama   = document.getElementById('inp_nama').value;
+    var wa     = document.getElementById('inp_wa').value;
+    var paket  = document.getElementById('inp_paket').value;
+    var jamaah = document.getElementById('inp_jamaah').value;
+    var pesan  = document.getElementById('inp_pesan').value;
+    var teks   = "Assalamu'alaikum, saya ingin mendaftar:%0A%0ANama: " + encodeURIComponent(nama) + "%0AWA: " + encodeURIComponent(wa) + "%0APaket: " + encodeURIComponent(paket) + "%0AJamaah: " + encodeURIComponent(jamaah) + "%0APesan: " + encodeURIComponent(pesan) + "%0A%0AJazakallahu khairan.";
+    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + teks;
   }
 </script>
 </body>
