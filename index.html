@@ -1003,15 +1003,15 @@
 
       <div class="form-group">
         <label>Nama Lengkap</label>
-        <input type="text" placeholder="Masukkan nama lengkap Anda"/>
+        <input id="inp_nama" type="text" placeholder="Masukkan nama lengkap Anda"/>
       </div>
       <div class="form-group">
         <label>Nomor WhatsApp</label>
-        <input type="tel" placeholder="+62 812-xxxx-xxxx"/>
+        <input id="inp_wa" type="tel" placeholder="+62 812-xxxx-xxxx"/>
       </div>
       <div class="form-group">
         <label>Pilih Paket</label>
-        <select>
+        <select id="inp_paket">
           <option value="">-- Pilih Paket --</option>
           <option>Umroh Paket Hemat – Rp 25 Juta</option>
           <option>Umroh Paket Premium – Rp 35 Juta</option>
@@ -1021,7 +1021,7 @@
       </div>
       <div class="form-group">
         <label>Jumlah Jamaah</label>
-        <select>
+        <select id="inp_jamaah">
           <option>1 orang</option>
           <option>2 orang (pasangan)</option>
           <option>3–5 orang (keluarga)</option>
@@ -1030,7 +1030,7 @@
       </div>
       <div class="form-group">
         <label>Pesan / Pertanyaan (Opsional)</label>
-        <textarea placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
+        <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
       </div>
       <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;" onclick="return bukaWA(event)">Kirim via WhatsApp ✉</a>
     </div>
@@ -1104,28 +1104,27 @@
 
   function bukaWA(e) {
     e.preventDefault();
-    const nama   = document.querySelectorAll('.form-group input')[0].value;
-    const wa     = document.querySelectorAll('.form-group input')[1].value;
-    const paket  = document.querySelectorAll('.form-group select')[0].value;
-    const jamaah = document.querySelectorAll('.form-group select')[1].value;
-    const pesan  = document.querySelector('.form-group textarea').value;
+    const nama   = document.getElementById('inp_nama').value.trim();
+    const wa     = document.getElementById('inp_wa').value.trim();
+    const paket  = document.getElementById('inp_paket').value;
+    const jamaah = document.getElementById('inp_jamaah').value;
+    const pesan  = document.getElementById('inp_pesan').value.trim();
 
     if (!nama || !wa) {
       alert('Mohon isi nama dan nomor WhatsApp terlebih dahulu.');
       return false;
     }
 
-    const teks = encodeURIComponent(
-      `Assalamu'alaikum, saya ingin mendaftar:\n\n` +
-      `👤 Nama: ${nama}\n` +
-      `📱 WA: ${wa}\n` +
-      `📦 Paket: ${paket || 'Belum dipilih'}\n` +
-      `👥 Jamaah: ${jamaah}\n` +
-      `💬 Pesan: ${pesan || '-'}\n\n` +
-      `Mohon informasi lebih lanjut. Jazakallahu khairan.`
-    );
+    const pesan_wa =
+      "Assalamu'alaikum, saya ingin mendaftar:%0A%0A" +
+      "%F0%9F%91%A4 Nama: " + encodeURIComponent(nama) + "%0A" +
+      "%F0%9F%93%B1 WA: " + encodeURIComponent(wa) + "%0A" +
+      "%F0%9F%93%A6 Paket: " + encodeURIComponent(paket || 'Belum dipilih') + "%0A" +
+      "%F0%9F%91%A5 Jamaah: " + encodeURIComponent(jamaah) + "%0A" +
+      "%F0%9F%92%AC Pesan: " + encodeURIComponent(pesan || '-') + "%0A%0A" +
+      "Mohon informasi lebih lanjut. Jazakallahu khairan.";
 
-    window.location.href = `https://api.whatsapp.com/send?phone=6287893033314&text=${teks}`;
+    window.location.href = "https://api.whatsapp.com/send?phone=6287893033314&text=" + pesan_wa;
     return false;
   }
     const nama   = document.querySelectorAll('.form-group input')[0].value;
