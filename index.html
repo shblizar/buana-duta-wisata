@@ -1032,7 +1032,7 @@
         <label>Pesan / Pertanyaan (Opsional)</label>
         <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
       </div>
-      <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;" onclick="return bukaWA(event)">Kirim via WhatsApp ✉</a>
+      <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;" onmousedown="bukaWA(event)">Kirim via WhatsApp ✉</a>
     </div>
   </div>
 </section>
@@ -1103,21 +1103,16 @@
   const NOMOR_WA = '6287893033314';
 
   function bukaWA(e) {
-    e.preventDefault();
     const nama   = document.getElementById('inp_nama').value.trim();
     const wa     = document.getElementById('inp_wa').value.trim();
     const paket  = document.getElementById('inp_paket').value;
     const jamaah = document.getElementById('inp_jamaah').value;
     const pesan  = document.getElementById('inp_pesan').value.trim();
 
-    if (!nama || !wa) {
-      alert('Mohon isi nama dan nomor WhatsApp terlebih dahulu.');
-      return false;
-    }
+    if (!nama || !wa) { return; }
 
-    const teks = "Assalamu'alaikum saya ingin daftar:\nNama: "+nama+"\nWA: "+wa+"\nPaket: "+paket+"\nJamaah: "+jamaah+"\nPesan: "+pesan;
-    window.open("https://wa.me/6287893033314?text="+encodeURIComponent(teks), '_blank');
-    return false;
+    const teks = "Assalamu'alaikum, saya ingin mendaftar:\n\nNama: " + nama + "\nWA: " + wa + "\nPaket: " + (paket||'Belum dipilih') + "\nJamaah: " + jamaah + "\nPesan: " + (pesan||'-') + "\n\nJazakallahu khairan.";
+    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
   }
 </script>
 </body>
