@@ -1031,7 +1031,7 @@
         <label>Pesan / Pertanyaan (Opsional)</label>
         <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
       </div>
-      <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">Kirim via WhatsApp ✉</a>
+      <a id="btnWA" href="https://web.whatsapp.com/send?phone=6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">Kirim via WhatsApp ✉</a>
     </div>
   </div>
 </section>
@@ -1108,7 +1108,7 @@
     var jamaah = document.getElementById('inp_jamaah').value;
     var pesan  = document.getElementById('inp_pesan').value;
     var teks   = "Assalamu'alaikum, saya ingin mendaftar:\n\nNama: "+nama+"\nWA: "+wa+"\nPaket: "+(paket||'Belum dipilih')+"\nJamaah: "+jamaah+"\nPesan: "+(pesan||'-')+"\n\nJazakallahu khairan.";
-    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
+    document.getElementById('btnWA').href = "https://web.whatsapp.com/send?phone=6287893033314&text=" + encodeURIComponent(teks);
   }
 
   // Update link setiap ada perubahan di form
