@@ -994,24 +994,23 @@
       </div>
     </div>
 
-    <!-- FORM PENDAFTARAN — nama field bisa diubah -->
+    <!-- FORM PENDAFTARAN -->
     <div class="kontak-form">
       <div style="margin-bottom:2rem">
         <div class="section-label" style="justify-content:flex-start;color:rgba(255,255,255,.5)">Form Pendaftaran</div>
         <h3 style="font-family:var(--font-serif);font-size:1.5rem;color:var(--white)">Daftar Sekarang</h3>
       </div>
-
       <div class="form-group">
         <label>Nama Lengkap</label>
-        <input id="inp_nama" type="text" placeholder="Masukkan nama lengkap Anda" oninput="updateWALink()"/>
+        <input id="inp_nama" type="text" placeholder="Masukkan nama lengkap Anda"/>
       </div>
       <div class="form-group">
         <label>Nomor WhatsApp</label>
-        <input id="inp_wa" type="tel" placeholder="+62 812-xxxx-xxxx" oninput="updateWALink()"/>
+        <input id="inp_wa" type="tel" placeholder="+62 812-xxxx-xxxx"/>
       </div>
       <div class="form-group">
         <label>Pilih Paket</label>
-        <select id="inp_paket" onchange="updateWALink()">
+        <select id="inp_paket">
           <option value="">-- Pilih Paket --</option>
           <option>Umroh Paket Hemat – Rp 25 Juta</option>
           <option>Umroh Paket Premium – Rp 35 Juta</option>
@@ -1021,7 +1020,7 @@
       </div>
       <div class="form-group">
         <label>Jumlah Jamaah</label>
-        <select id="inp_jamaah" onchange="updateWALink()">
+        <select id="inp_jamaah">
           <option>1 orang</option>
           <option>2 orang (pasangan)</option>
           <option>3–5 orang (keluarga)</option>
@@ -1030,7 +1029,7 @@
       </div>
       <div class="form-group">
         <label>Pesan / Pertanyaan (Opsional)</label>
-        <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..." oninput="updateWALink()"></textarea>
+        <textarea id="inp_pesan" placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
       </div>
       <a id="btnWA" href="https://wa.me/6287893033314" target="_blank" class="btn-form" style="display:block;text-align:center;text-decoration:none;">Kirim via WhatsApp ✉</a>
     </div>
@@ -1108,9 +1107,18 @@
     var paket  = document.getElementById('inp_paket').value;
     var jamaah = document.getElementById('inp_jamaah').value;
     var pesan  = document.getElementById('inp_pesan').value;
-    var teks   = "Assalamu'alaikum, saya ingin mendaftar:%0A%0ANama: " + encodeURIComponent(nama) + "%0AWA: " + encodeURIComponent(wa) + "%0APaket: " + encodeURIComponent(paket) + "%0AJamaah: " + encodeURIComponent(jamaah) + "%0APesan: " + encodeURIComponent(pesan) + "%0A%0AJazakallahu khairan.";
-    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + teks;
+    var teks   = "Assalamu'alaikum, saya ingin mendaftar:\n\nNama: "+nama+"\nWA: "+wa+"\nPaket: "+(paket||'Belum dipilih')+"\nJamaah: "+jamaah+"\nPesan: "+(pesan||'-')+"\n\nJazakallahu khairan.";
+    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
   }
+
+  // Update link setiap ada perubahan di form
+  document.addEventListener('DOMContentLoaded', function() {
+    updateWALink();
+    ['inp_nama','inp_wa','inp_paket','inp_jamaah','inp_pesan'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', updateWALink);
+      document.getElementById(id).addEventListener('change', updateWALink);
+    });
+  });
 </script>
 </body>
 </html>
