@@ -1124,7 +1124,13 @@
       `💬 Pesan: ${pesan || '-'}\n\n` +
       `Mohon informasi lebih lanjut. Jazakallahu khairan.`
     );
-    window.open(`https://wa.me/${NOMOR_WA}?text=${teks}`, '_blank');
+    const waLink = document.createElement('a');
+    waLink.href = `https://wa.me/${NOMOR_WA}?text=${teks}`;
+    waLink.target = '_blank';
+    waLink.rel = 'noopener';
+    document.body.appendChild(waLink);
+    waLink.click();
+    document.body.removeChild(waLink);
 
     // ── Simpan ke Supabase (background) ──
     const { error } = await supabase.from('pendaftaran').insert([{
