@@ -1032,7 +1032,7 @@
         <label>Pesan / Pertanyaan (Opsional)</label>
         <textarea placeholder="Tulis pertanyaan atau kebutuhan khusus Anda..."></textarea>
       </div>
-      <button class="btn-form" onclick="kirimWA()">Kirim via WhatsApp ✉</button>
+      <a id="btnWA" href="#" class="btn-form" style="display:block;text-align:center;text-decoration:none;" onclick="return bukaWA()">Kirim via WhatsApp ✉</a>
     </div>
   </div>
 </section>
@@ -1102,7 +1102,31 @@
   // ── Kirim via WhatsApp + Simpan ke Database ──
   const NOMOR_WA = '6287893033314';
 
-  async function kirimWA() {
+  function bukaWA() {
+    const nama   = document.querySelectorAll('.form-group input')[0].value;
+    const wa     = document.querySelectorAll('.form-group input')[1].value;
+    const paket  = document.querySelectorAll('.form-group select')[0].value;
+    const jamaah = document.querySelectorAll('.form-group select')[1].value;
+    const pesan  = document.querySelector('.form-group textarea').value;
+
+    if (!nama || !wa) {
+      alert('Mohon isi nama dan nomor WhatsApp terlebih dahulu.');
+      return false;
+    }
+
+    const teks = encodeURIComponent(
+      `Assalamu'alaikum, saya ingin mendaftar:\n\n` +
+      `👤 Nama: ${nama}\n` +
+      `📱 WA: ${wa}\n` +
+      `📦 Paket: ${paket || 'Belum dipilih'}\n` +
+      `👥 Jamaah: ${jamaah}\n` +
+      `💬 Pesan: ${pesan || '-'}\n\n` +
+      `Mohon informasi lebih lanjut. Jazakallahu khairan.`
+    );
+
+    document.getElementById('btnWA').href = `https://wa.me/6287893033314?text=${teks}`;
+    return true;
+  }
     const nama   = document.querySelectorAll('.form-group input')[0].value;
     const wa     = document.querySelectorAll('.form-group input')[1].value;
     const paket  = document.querySelectorAll('.form-group select')[0].value;
