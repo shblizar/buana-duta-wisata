@@ -1127,56 +1127,6 @@
     window.location.href = "https://api.whatsapp.com/send?phone=6287893033314&text=" + pesan_wa;
     return false;
   }
-    const nama   = document.querySelectorAll('.form-group input')[0].value;
-    const wa     = document.querySelectorAll('.form-group input')[1].value;
-    const paket  = document.querySelectorAll('.form-group select')[0].value;
-    const jamaah = document.querySelectorAll('.form-group select')[1].value;
-    const pesan  = document.querySelector('.form-group textarea').value;
-
-    if (!nama || !wa) {
-      alert('Mohon isi nama dan nomor WhatsApp terlebih dahulu.');
-      return;
-    }
-
-    // ── Buka WhatsApp DULU (sebelum async) biar tidak diblokir browser ──
-    const teks = encodeURIComponent(
-      `Assalamu'alaikum, saya ingin mendaftar:\n\n` +
-      `👤 Nama: ${nama}\n` +
-      `📱 WA: ${wa}\n` +
-      `📦 Paket: ${paket || 'Belum dipilih'}\n` +
-      `👥 Jamaah: ${jamaah}\n` +
-      `💬 Pesan: ${pesan || '-'}\n\n` +
-      `Mohon informasi lebih lanjut. Jazakallahu khairan.`
-    );
-    const waLink = document.createElement('a');
-    waLink.href = `https://wa.me/${NOMOR_WA}?text=${teks}`;
-    waLink.target = '_blank';
-    waLink.rel = 'noopener';
-    document.body.appendChild(waLink);
-    waLink.click();
-    document.body.removeChild(waLink);
-
-    // ── Simpan ke Supabase (background) ──
-    const { error } = await supabase.from('pendaftaran').insert([{
-      nama:           nama,
-      whatsapp:       wa,
-      paket:          paket,
-      jumlah_jamaah:  jamaah,
-      pesan:          pesan,
-      tanggal_daftar: new Date().toISOString()
-    }]);
-
-    if (error) {
-      console.error('Gagal simpan ke database:', error);
-    } else {
-      console.log('✅ Data berhasil disimpan ke database!');
-    }
-
-    // ── Reset form ──
-    document.querySelectorAll('.form-group input').forEach(i => i.value = '');
-    document.querySelectorAll('.form-group select').forEach(s => s.selectedIndex = 0);
-    document.querySelector('.form-group textarea').value = '';
-  }
 </script>
 </body>
 </html>
