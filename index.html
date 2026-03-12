@@ -1114,23 +1114,7 @@
       return;
     }
 
-    // ── Simpan ke Supabase ──
-    const { error } = await supabase.from('pendaftaran').insert([{
-      nama:           nama,
-      whatsapp:       wa,
-      paket:          paket,
-      jumlah_jamaah:  jamaah,
-      pesan:          pesan,
-      tanggal_daftar: new Date().toISOString()
-    }]);
-
-    if (error) {
-      console.error('Gagal simpan:', error);
-    } else {
-      console.log('Data berhasil disimpan ke database!');
-    }
-
-    // ── Kirim ke WhatsApp ──
+    // ── Buka WhatsApp DULU (sebelum async) biar tidak diblokir browser ──
     const teks = encodeURIComponent(
       `Assalamu'alaikum, saya ingin mendaftar:\n\n` +
       `👤 Nama: ${nama}\n` +
@@ -1142,12 +1126,26 @@
     );
     window.open(`https://wa.me/${NOMOR_WA}?text=${teks}`, '_blank');
 
+    // ── Simpan ke Supabase (background) ──
+    const { error } = await supabase.from('pendaftaran').insert([{
+      nama:           nama,
+      whatsapp:       wa,
+      paket:          paket,
+      jumlah_jamaah:  jamaah,
+      pesan:          pesan,
+      tanggal_daftar: new Date().toISOString()
+    }]);
+
+    if (error) {
+      console.error('Gagal simpan ke database:', error);
+    } else {
+      console.log('✅ Data berhasil disimpan ke database!');
+    }
+
     // ── Reset form ──
     document.querySelectorAll('.form-group input').forEach(i => i.value = '');
     document.querySelectorAll('.form-group select').forEach(s => s.selectedIndex = 0);
     document.querySelector('.form-group textarea').value = '';
-    alert('✅ Data berhasil disimpan! WhatsApp akan terbuka sekarang.');
-
   }
 </script>
 </body>
