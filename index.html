@@ -1071,11 +1071,11 @@
 
 <script>
   // ═══════════════════════════════════════
-  // KONFIGURASI SUPABASE — jangan diubah
+  // KONFIGURASI SUPABASE
   // ═══════════════════════════════════════
-  const SUPABASE_URL  = 'https://nxiqgmwnuzhnubwamnjp.supabase.co';
-  const SUPABASE_KEY  = 'sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var SUPABASE_URL  = 'https://nxiqgmwnuzhnubwamnjp.supabase.co';
+  var SUPABASE_KEY  = 'sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB';
+  var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // ── Navbar scroll effect ──
   window.addEventListener('scroll', () => {
