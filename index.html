@@ -1098,8 +1098,6 @@
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // ── Kirim via WhatsApp + Simpan ke Database ──
-  const NOMOR_WA = '6287893033314';
 
   function updateWALink() {
     var nama   = document.getElementById('inp_nama').value;
@@ -1108,16 +1106,20 @@
     var jamaah = document.getElementById('inp_jamaah').value;
     var pesan  = document.getElementById('inp_pesan').value;
     var teks   = "Assalamu'alaikum, saya ingin mendaftar:\n\nNama: "+nama+"\nWA: "+wa+"\nPaket: "+(paket||'Belum dipilih')+"\nJamaah: "+jamaah+"\nPesan: "+(pesan||'-')+"\n\nJazakallahu khairan.";
-    document.getElementById('btnWA').href = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
+    var url = "https://wa.me/6287893033314?text=" + encodeURIComponent(teks);
+    document.getElementById('btnWA').href = url;
+    console.log("WA Link updated:", url.substring(0,80));
   }
 
   // Update link setiap ada perubahan di form
   document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM ready, init form...");
     updateWALink();
     ['inp_nama','inp_wa','inp_paket','inp_jamaah','inp_pesan'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', updateWALink);
       document.getElementById(id).addEventListener('change', updateWALink);
     });
+    console.log("Form listeners attached!");
   });
 </script>
 </body>
