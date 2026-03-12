@@ -1115,16 +1115,8 @@
       return false;
     }
 
-    const pesan_wa =
-      "Assalamu'alaikum, saya ingin mendaftar:%0A%0A" +
-      "%F0%9F%91%A4 Nama: " + encodeURIComponent(nama) + "%0A" +
-      "%F0%9F%93%B1 WA: " + encodeURIComponent(wa) + "%0A" +
-      "%F0%9F%93%A6 Paket: " + encodeURIComponent(paket || 'Belum dipilih') + "%0A" +
-      "%F0%9F%91%A5 Jamaah: " + encodeURIComponent(jamaah) + "%0A" +
-      "%F0%9F%92%AC Pesan: " + encodeURIComponent(pesan || '-') + "%0A%0A" +
-      "Mohon informasi lebih lanjut. Jazakallahu khairan.";
-
-    window.location.href = "https://api.whatsapp.com/send?phone=6287893033314&text=" + pesan_wa;
+    const teks = "Assalamu'alaikum saya ingin daftar:\nNama: "+nama+"\nWA: "+wa+"\nPaket: "+paket+"\nJamaah: "+jamaah+"\nPesan: "+pesan;
+    window.open("https://wa.me/6287893033314?text="+encodeURIComponent(teks), '_blank');
     return false;
   }
 </script>
