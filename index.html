@@ -1113,13 +1113,32 @@
 
   // Update link setiap ada perubahan di form
   document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM ready, init form...");
     updateWALink();
     ['inp_nama','inp_wa','inp_paket','inp_jamaah','inp_pesan'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', updateWALink);
       document.getElementById(id).addEventListener('change', updateWALink);
     });
-    console.log("Form listeners attached!");
+
+    // Simpan ke Supabase saat tombol diklik
+    document.getElementById('btnWA').addEventListener('click', function() {
+      var nama   = document.getElementById('inp_nama').value.trim();
+      var wa     = document.getElementById('inp_wa').value.trim();
+      var paket  = document.getElementById('inp_paket').value;
+      var jamaah = document.getElementById('inp_jamaah').value;
+      var pesan  = document.getElementById('inp_pesan').value.trim();
+      if (!nama || !wa) return;
+      supabaseClient.from('pendaftaran').insert([{
+        nama: nama,
+        whatsapp: wa,
+        paket: paket,
+        jumlah_jamaah: jamaah,
+        pesan: pesan,
+        tanggal_daftar: new Date().toISOString()
+      }]).then(function(result) {
+        if (result.error) { console.error('Gagal simpan:', result.error); }
+        else { console.log('✅ Data tersimpan ke database!'); }
+      });
+    });
   });
 </script>
 </body>
