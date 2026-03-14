@@ -3,226 +3,248 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel – Buana Duta Wisata</title>
+  <title>Admin – Buana Duta Wisata</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #080B0F; --surface: #0E1318; --border: #1C2530;
+      --gold: #C9A84C; --gold2: #F0CC6E; --text: #E8EDF2;
+      --muted: #5A6A7A; --green: #25D366; --red: #E05555;
+      --font: 'Sora', sans-serif; --mono: 'DM Mono', monospace;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
 
     /* LOGIN */
     #loginPage {
+      position: fixed; inset: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      background: var(--bg);
     }
-    .login-box {
-      background: #1e1e1e; border: 1px solid #C9A84C;
-      border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 380px;
-      text-align: center;
+    #loginPage::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
     }
-    .login-box h1 { color: #C9A84C; font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .login-box p { color: #999; font-size: 0.85rem; margin-bottom: 2rem; }
-    .login-box input {
-      width: 100%; padding: 0.8rem 1rem; margin-bottom: 1rem;
-      background: #2a2a2a; border: 1px solid #333; border-radius: 8px;
-      color: #fff; font-size: 1rem;
+    .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 400px; padding: 2rem; }
+    .login-eyebrow {
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
     }
-    .login-box input:focus { outline: none; border-color: #C9A84C; }
-    .btn-login {
-      width: 100%; padding: 0.8rem; background: #C9A84C; color: #000;
-      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
-      cursor: pointer; transition: background 0.2s;
+    .login-eyebrow::before { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.3; }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 2px; padding: 2.5rem;
     }
-    .btn-login:hover { background: #E8CC84; }
-    .error-msg { color: #ff4444; font-size: 0.85rem; margin-top: 0.5rem; display:none; }
+    .login-card h1 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+    .login-card h1 span { color: var(--gold); }
+    .login-card p { color: var(--muted); font-size: 0.82rem; margin-bottom: 2rem; line-height: 1.5; }
+    .field-label { font-size: 0.72rem; font-family: var(--mono); color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .login-card input {
+      width: 100%; padding: 0.85rem 1rem;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--font); font-size: 0.95rem;
+      outline: none; transition: border-color 0.2s; border-radius: 2px; letter-spacing: 0.1em;
+    }
+    .login-card input:focus { border-color: var(--gold); }
+    .btn-enter {
+      width: 100%; margin-top: 1.25rem; padding: 0.9rem;
+      background: var(--gold); color: #000; border: none;
+      font-family: var(--font); font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s; border-radius: 2px;
+    }
+    .btn-enter:hover { background: var(--gold2); }
+    .err { color: var(--red); font-size: 0.78rem; font-family: var(--mono); margin-top: 0.75rem; display: none; }
 
-    /* ADMIN PANEL */
-    #adminPage { display: none; }
+    /* ADMIN */
+    #adminPage { display: none; min-height: 100vh; }
+
     .topbar {
-      background: #1e1e1e; border-bottom: 1px solid #C9A84C;
-      padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(8,11,15,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .topbar h1 { color: #C9A84C; font-size: 1.2rem; }
-    .topbar span { color: #999; font-size: 0.85rem; }
-    .btn-logout {
-      background: transparent; border: 1px solid #ff4444; color: #ff4444;
-      padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+    .topbar-brand { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; }
+    .topbar-brand span { color: var(--gold); }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .ts { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+    .btn-out {
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
+      color: var(--muted); background: transparent; border: 1px solid var(--border);
+      padding: 0.35rem 0.8rem; cursor: pointer; text-transform: uppercase;
+      transition: all 0.2s; border-radius: 2px;
     }
-    .btn-logout:hover { background: #ff4444; color: #fff; }
+    .btn-out:hover { color: var(--red); border-color: var(--red); }
 
-    .container { padding: 2rem; }
+    .main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
 
-    /* STATS */
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card {
-      background: #1e1e1e; border: 1px solid #333; border-radius: 10px;
-      padding: 1.2rem; text-align: center;
-    }
-    .stat-card .number { font-size: 2rem; font-weight: 700; color: #C9A84C; }
-    .stat-card .label { color: #999; font-size: 0.85rem; margin-top: 0.3rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-bottom: 2rem; background: var(--border); border: 1px solid var(--border); }
+    .stat { background: var(--surface); padding: 1.5rem 2rem; position: relative; overflow: hidden; }
+    .stat::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
+    .stat:hover::after { opacity: 1; }
+    .stat-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--gold); letter-spacing: -0.03em; line-height: 1; }
+    .stat-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
 
-    /* TABLE */
-    .table-wrap {
-      background: #1e1e1e; border: 1px solid #333; border-radius: 10px; overflow: hidden;
-    }
-    .table-header {
-      padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid #333;
-    }
-    .table-header h2 { font-size: 1rem; color: #fff; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .section-title { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
     .btn-refresh {
-      background: #C9A84C; color: #000; border: none; padding: 0.4rem 1rem;
-      border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em;
+      color: var(--gold); background: transparent; border: 1px solid rgba(201,168,76,0.25);
+      padding: 0.35rem 0.9rem; cursor: pointer; text-transform: uppercase;
+      transition: all 0.2s; border-radius: 2px;
     }
-    .btn-refresh:hover { background: #E8CC84; }
+    .btn-refresh:hover { background: rgba(201,168,76,0.07); border-color: var(--gold); }
 
-    table { width: 100%; border-collapse: collapse; }
-    thead { background: #252525; }
-    thead th { padding: 0.8rem 1rem; text-align: left; font-size: 0.8rem; color: #C9A84C; text-transform: uppercase; letter-spacing: 0.05em; }
-    tbody tr { border-bottom: 1px solid #2a2a2a; transition: background 0.15s; }
-    tbody tr:hover { background: #252525; }
-    tbody td { padding: 0.9rem 1rem; font-size: 0.9rem; color: #ddd; }
-    tbody td.wa { color: #25D366; }
-    .badge {
-      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px;
-      font-size: 0.75rem; font-weight: 600; background: #C9A84C22; color: #C9A84C;
-    }
-    .empty { text-align: center; padding: 3rem; color: #555; }
-    .loading { text-align: center; padding: 2rem; color: #C9A84C; }
+    .table-container { background: var(--surface); border: 1px solid var(--border); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    thead tr { border-bottom: 1px solid var(--border); }
+    thead th { padding: 0.8rem 1.25rem; text-align: left; font-family: var(--mono); font-size: 0.63rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 400; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid rgba(28,37,48,0.5); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.018); }
+    tbody td { padding: 0.95rem 1.25rem; font-size: 0.875rem; vertical-align: middle; }
+    .td-num { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); }
+    .td-nama { font-weight: 500; }
+    .td-wa a { color: var(--green); text-decoration: none; font-family: var(--mono); font-size: 0.8rem; }
+    .td-wa a:hover { text-decoration: underline; }
+    .paket-tag { display: inline-block; padding: 0.18rem 0.6rem; background: rgba(201,168,76,0.09); color: var(--gold); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; border: 1px solid rgba(201,168,76,0.18); border-radius: 2px; white-space: nowrap; }
+    .td-sub { font-size: 0.8rem; color: var(--muted); }
+    .td-date { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+    .td-pesan { font-size: 0.8rem; color: var(--muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .state { text-align: center; padding: 4rem 2rem; font-family: var(--mono); font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; }
+    .loading { animation: blink 1.2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.25} }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    @media(max-width:768px){ .stats-row{grid-template-columns:1fr;} .main{padding:1rem;} }
   </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
 <div id="loginPage">
-  <div class="login-box">
-    <h1>🕌 Admin Panel</h1>
-    <p>Buana Duta Wisata – Travel Haji & Umroh</p>
-    <input type="password" id="passwordInput" placeholder="Masukkan password admin" onkeydown="if(event.key==='Enter') login()"/>
-    <button class="btn-login" onclick="login()">Masuk</button>
-    <div class="error-msg" id="errorMsg">Password salah! Coba lagi.</div>
+  <div class="login-wrap">
+    <div class="login-eyebrow">Admin Access</div>
+    <div class="login-card">
+      <h1>Buana Duta <span>Wisata</span></h1>
+      <p>Panel administrasi internal. Masukkan kata sandi untuk melanjutkan.</p>
+      <div class="field-label">Kata Sandi</div>
+      <input type="password" id="passInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="btn-enter" onclick="doLogin()">Masuk →</button>
+      <div class="err" id="errMsg">// kata sandi tidak valid</div>
+    </div>
   </div>
 </div>
 
-<!-- ADMIN PAGE -->
 <div id="adminPage">
   <div class="topbar">
-    <h1>🕌 Buana Duta Wisata – Admin Panel</h1>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <span id="lastUpdate"></span>
-      <button class="btn-logout" onclick="logout()">Keluar</button>
+    <div class="topbar-brand">Buana Duta <span>Wisata</span> &nbsp;/&nbsp; <span style="color:var(--muted);font-weight:400;font-size:0.75rem">admin</span></div>
+    <div class="topbar-right">
+      <div class="live-dot"></div>
+      <div class="ts" id="tsLabel"></div>
+      <button class="btn-out" onclick="doLogout()">Keluar</button>
     </div>
   </div>
 
-  <div class="container">
-    <div class="stats">
-      <div class="stat-card">
-        <div class="number" id="totalPendaftar">–</div>
-        <div class="label">Total Pendaftar</div>
+  <div class="main">
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-label">Total Pendaftar</div>
+        <div class="stat-value" id="sTotal">–</div>
+        <div class="stat-sub">semua waktu</div>
       </div>
-      <div class="stat-card">
-        <div class="number" id="pendaftarHariIni">–</div>
-        <div class="label">Pendaftar Hari Ini</div>
+      <div class="stat">
+        <div class="stat-label">Hari Ini</div>
+        <div class="stat-value" id="sHariIni">–</div>
+        <div class="stat-sub" id="sDate"></div>
       </div>
-      <div class="stat-card">
-        <div class="number" id="paketTerbanyak">–</div>
-        <div class="label">Paket Terbanyak</div>
+      <div class="stat">
+        <div class="stat-label">Paket Terlaris</div>
+        <div class="stat-value" id="sPaket" style="font-size:1rem;padding-top:0.6rem">–</div>
+        <div class="stat-sub" id="sPaketSub"></div>
       </div>
     </div>
 
-    <div class="table-wrap">
-      <div class="table-header">
-        <h2>Data Pendaftar</h2>
-        <button class="btn-refresh" onclick="loadData()">🔄 Refresh</button>
-      </div>
-      <div id="tableContent">
-        <div class="loading">Memuat data...</div>
-      </div>
+    <div class="section-head">
+      <div class="section-title">// data_pendaftaran</div>
+      <button class="btn-refresh" onclick="loadData()">↻ refresh</button>
+    </div>
+
+    <div class="table-container" id="tableWrap">
+      <div class="state loading">memuat data...</div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  var SUPABASE_URL = 'https://nxiqgmwnuzhnubwamnjp.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB';
-  var ADMIN_PASSWORD = 'bdwisata2024'; // ← GANTI PASSWORD INI!
-  var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var PASS = 'bdwisata2024';
+  var db = window.supabase.createClient('https://nxiqgmwnuzhnubwamnjp.supabase.co','sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB');
 
-  function login() {
-    var pass = document.getElementById('passwordInput').value;
-    if (pass === ADMIN_PASSWORD) {
+  function doLogin() {
+    if (document.getElementById('passInput').value === PASS) {
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('adminPage').style.display = 'block';
       loadData();
     } else {
-      document.getElementById('errorMsg').style.display = 'block';
+      document.getElementById('errMsg').style.display = 'block';
     }
   }
 
-  function logout() {
+  function doLogout() {
     document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('adminPage').style.display = 'none';
-    document.getElementById('passwordInput').value = '';
+    document.getElementById('passInput').value = '';
+    document.getElementById('errMsg').style.display = 'none';
   }
 
   async function loadData() {
-    document.getElementById('tableContent').innerHTML = '<div class="loading">Memuat data...</div>';
-    
-    var result = await db.from('pendaftaran').select('*').order('tanggal_daftar', { ascending: false });
-    
-    if (result.error) {
-      document.getElementById('tableContent').innerHTML = '<div class="empty">Gagal memuat data: ' + result.error.message + '</div>';
-      return;
-    }
+    document.getElementById('tableWrap').innerHTML = '<div class="state loading">memuat data...</div>';
+    document.getElementById('tsLabel').textContent = new Date().toLocaleTimeString('id-ID');
 
-    var data = result.data;
-    
-    // Stats
-    document.getElementById('totalPendaftar').textContent = data.length;
-    
+    var res = await db.from('pendaftaran').select('*').order('tanggal_daftar',{ascending:false});
+    if (res.error) { document.getElementById('tableWrap').innerHTML = '<div class="state">// error: '+res.error.message+'</div>'; return; }
+
+    var data = res.data || [];
+    document.getElementById('sTotal').textContent = data.length;
+
     var today = new Date().toDateString();
-    var hariIni = data.filter(function(d) {
-      return new Date(d.tanggal_daftar).toDateString() === today;
-    }).length;
-    document.getElementById('pendaftarHariIni').textContent = hariIni;
+    var hi = data.filter(function(d){ return new Date(d.tanggal_daftar).toDateString()===today; }).length;
+    document.getElementById('sHariIni').textContent = hi;
+    document.getElementById('sDate').textContent = new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
 
-    // Paket terbanyak
-    var paketCount = {};
-    data.forEach(function(d) {
-      var p = d.paket || 'Belum dipilih';
-      paketCount[p] = (paketCount[p] || 0) + 1;
-    });
-    var topPaket = Object.keys(paketCount).sort(function(a,b){ return paketCount[b]-paketCount[a]; })[0];
-    document.getElementById('paketTerbanyak').textContent = topPaket ? topPaket.split('–')[0].trim() : '–';
+    var pc = {};
+    data.forEach(function(d){ var p=(d.paket||'Belum dipilih').split('–')[0].trim(); pc[p]=(pc[p]||0)+1; });
+    var top = Object.keys(pc).sort(function(a,b){return pc[b]-pc[a];})[0];
+    if (top) { document.getElementById('sPaket').textContent = top; document.getElementById('sPaketSub').textContent = pc[top]+' pendaftar'; }
 
-    // Last update
-    document.getElementById('lastUpdate').textContent = 'Update: ' + new Date().toLocaleTimeString('id-ID');
+    if (!data.length) { document.getElementById('tableWrap').innerHTML = '<div class="state">// belum ada data pendaftar</div>'; return; }
 
-    // Table
-    if (data.length === 0) {
-      document.getElementById('tableContent').innerHTML = '<div class="empty">Belum ada pendaftar.</div>';
-      return;
-    }
-
-    var rows = data.map(function(d, i) {
-      var tgl = d.tanggal_daftar ? new Date(d.tanggal_daftar).toLocaleString('id-ID') : '-';
-      return '<tr>' +
-        '<td>' + (i+1) + '</td>' +
-        '<td><strong>' + (d.nama||'-') + '</strong></td>' +
-        '<td class="wa"><a href="https://wa.me/' + (d.whatsapp||'').replace(/\D/g,'') + '" target="_blank" style="color:#25D366;text-decoration:none;">📱 ' + (d.whatsapp||'-') + '</a></td>' +
-        '<td><span class="badge">' + (d.paket||'Belum dipilih') + '</span></td>' +
-        '<td>' + (d.jumlah_jamaah||'-') + '</td>' +
-        '<td>' + (d.pesan||'-') + '</td>' +
-        '<td style="color:#888;font-size:0.8rem;">' + tgl + '</td>' +
+    var rows = data.map(function(d,i){
+      var tgl = d.tanggal_daftar ? new Date(d.tanggal_daftar).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '–';
+      var wa = (d.whatsapp||'').replace(/\D/g,'');
+      var paket = (d.paket||'Belum dipilih').split('–')[0].trim();
+      return '<tr>'+
+        '<td class="td-num">'+String(i+1).padStart(2,'0')+'</td>'+
+        '<td class="td-nama">'+( d.nama||'–')+'</td>'+
+        '<td class="td-wa"><a href="https://wa.me/'+wa+'" target="_blank">'+( d.whatsapp||'–')+'</a></td>'+
+        '<td><span class="paket-tag">'+paket+'</span></td>'+
+        '<td class="td-sub">'+(d.jumlah_jamaah||'–')+'</td>'+
+        '<td class="td-pesan" title="'+(d.pesan||'')+'">'+(d.pesan||'–')+'</td>'+
+        '<td class="td-date">'+tgl+'</td>'+
       '</tr>';
     }).join('');
 
-    document.getElementById('tableContent').innerHTML = 
-      '<table>' +
-        '<thead><tr>' +
-          '<th>No</th><th>Nama</th><th>WhatsApp</th><th>Paket</th><th>Jamaah</th><th>Pesan</th><th>Tanggal</th>' +
-        '</tr></thead>' +
-        '<tbody>' + rows + '</tbody>' +
-      '</table>';
+    document.getElementById('tableWrap').innerHTML =
+      '<table><thead><tr><th>#</th><th>Nama</th><th>WhatsApp</th><th>Paket</th><th>Jamaah</th><th>Pesan</th><th>Tanggal</th></tr></thead><tbody>'+rows+'</tbody></table>';
   }
 </script>
 </body>
