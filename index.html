@@ -1119,14 +1119,15 @@
       document.getElementById(id).addEventListener('change', updateWALink);
     });
 
-    // Simpan ke Supabase saat tombol diklik
-    document.getElementById('btnWA').addEventListener('click', function() {
+    // Simpan ke Supabase saat tombol ditekan (mousedown = sebelum link kebuka)
+    document.getElementById('btnWA').addEventListener('mousedown', function() {
       var nama   = document.getElementById('inp_nama').value.trim();
       var wa     = document.getElementById('inp_wa').value.trim();
       var paket  = document.getElementById('inp_paket').value;
       var jamaah = document.getElementById('inp_jamaah').value;
       var pesan  = document.getElementById('inp_pesan').value.trim();
       if (!nama || !wa) return;
+      console.log('Menyimpan data ke Supabase...');
       supabaseClient.from('pendaftaran').insert([{
         nama: nama,
         whatsapp: wa,
