@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://nxiqgmwnuzhnubwamnjp.supabase.co; font-src 'self' data:;">
   <title>Admin – Buana Duta Wisata</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #080B0F; --surface: #0E1318; --border: #1C2530;
       --gold: #C9A84C; --gold2: #F0CC6E; --text: #E8EDF2;
       --muted: #5A6A7A; --green: #25D366; --red: #E05555;
-      --font: 'Sora', sans-serif; --mono: 'DM Mono', monospace;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'Consolas', 'Courier New', monospace;
     }
     html, body { height: 100%; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
