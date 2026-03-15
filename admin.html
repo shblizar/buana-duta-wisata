@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://nxiqgmwnuzhnubwamnjp.supabase.co; font-src 'self' data:;">
   <title>Admin – Buana Duta Wisata</title>
-
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -18,28 +16,19 @@
     html, body { height: 100%; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-    /* LOGIN */
     #loginPage {
       position: fixed; inset: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       background: var(--bg);
     }
-    #loginPage::after {
-      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
-      top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
-    }
-    .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 400px; padding: 2rem; }
+    .login-wrap { width: 100%; max-width: 400px; padding: 2rem; }
     .login-eyebrow {
       font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em;
       color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem;
       display: flex; align-items: center; gap: 0.75rem;
     }
     .login-eyebrow::before { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.3; }
-    .login-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 2px; padding: 2.5rem;
-    }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 2.5rem; }
     .login-card h1 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.02em; }
     .login-card h1 span { color: var(--gold); }
     .login-card p { color: var(--muted); font-size: 0.82rem; margin-bottom: 2rem; line-height: 1.5; }
@@ -61,13 +50,10 @@
     .btn-enter:hover { background: var(--gold2); }
     .err { color: var(--red); font-size: 0.78rem; font-family: var(--mono); margin-top: 0.75rem; display: none; }
 
-    /* ADMIN */
     #adminPage { display: none; min-height: 100vh; }
-
     .topbar {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(8,11,15,0.92); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(8,11,15,0.95); border-bottom: 1px solid var(--border);
       padding: 0 2rem; height: 56px;
       display: flex; align-items: center; justify-content: space-between;
     }
@@ -86,7 +72,6 @@
     .btn-out:hover { color: var(--red); border-color: var(--red); }
 
     .main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-
     .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-bottom: 2rem; background: var(--border); border: 1px solid var(--border); }
     .stat { background: var(--surface); padding: 1.5rem 2rem; position: relative; overflow: hidden; }
     .stat::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
@@ -117,7 +102,7 @@
     .td-nama { font-weight: 500; }
     .td-wa a { color: var(--green); text-decoration: none; font-family: var(--mono); font-size: 0.8rem; }
     .td-wa a:hover { text-decoration: underline; }
-    .paket-tag { display: inline-block; padding: 0.18rem 0.6rem; background: rgba(201,168,76,0.09); color: var(--gold); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; border: 1px solid rgba(201,168,76,0.18); border-radius: 2px; white-space: nowrap; }
+    .paket-tag { display: inline-block; padding: 0.18rem 0.6rem; background: rgba(201,168,76,0.09); color: var(--gold); font-family: var(--mono); font-size: 0.68rem; border: 1px solid rgba(201,168,76,0.18); border-radius: 2px; white-space: nowrap; }
     .td-sub { font-size: 0.8rem; color: var(--muted); }
     .td-date { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
     .td-pesan { font-size: 0.8rem; color: var(--muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -186,10 +171,10 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var PASS = 'bdwisata2024';
-  var db = window.supabase.createClient('https://nxiqgmwnuzhnubwamnjp.supabase.co','sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB');
+  var SUPABASE_URL = 'https://nxiqgmwnuzhnubwamnjp.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_PVtQ84jPJ-00LXjoIVb36Q_G99Li6dB';
 
   function doLogin() {
     if (document.getElementById('passInput').value === PASS) {
@@ -212,41 +197,60 @@
     document.getElementById('tableWrap').innerHTML = '<div class="state loading">memuat data...</div>';
     document.getElementById('tsLabel').textContent = new Date().toLocaleTimeString('id-ID');
 
-    var res = await db.from('pendaftaran').select('*').order('tanggal_daftar',{ascending:false});
-    if (res.error) { document.getElementById('tableWrap').innerHTML = '<div class="state">// error: '+res.error.message+'</div>'; return; }
+    try {
+      var res = await fetch(
+        SUPABASE_URL + '/rest/v1/pendaftaran?select=*&order=tanggal_daftar.desc',
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-    var data = res.data || [];
-    document.getElementById('sTotal').textContent = data.length;
+      if (!res.ok) {
+        document.getElementById('tableWrap').innerHTML = '<div class="state">// error: ' + res.status + ' ' + res.statusText + '</div>';
+        return;
+      }
 
-    var today = new Date().toDateString();
-    var hi = data.filter(function(d){ return new Date(d.tanggal_daftar).toDateString()===today; }).length;
-    document.getElementById('sHariIni').textContent = hi;
-    document.getElementById('sDate').textContent = new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
+      var data = await res.json();
 
-    var pc = {};
-    data.forEach(function(d){ var p=(d.paket||'Belum dipilih').split('–')[0].trim(); pc[p]=(pc[p]||0)+1; });
-    var top = Object.keys(pc).sort(function(a,b){return pc[b]-pc[a];})[0];
-    if (top) { document.getElementById('sPaket').textContent = top; document.getElementById('sPaketSub').textContent = pc[top]+' pendaftar'; }
+      document.getElementById('sTotal').textContent = data.length;
 
-    if (!data.length) { document.getElementById('tableWrap').innerHTML = '<div class="state">// belum ada data pendaftar</div>'; return; }
+      var today = new Date().toDateString();
+      var hi = data.filter(function(d){ return new Date(d.tanggal_daftar).toDateString()===today; }).length;
+      document.getElementById('sHariIni').textContent = hi;
+      document.getElementById('sDate').textContent = new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
 
-    var rows = data.map(function(d,i){
-      var tgl = d.tanggal_daftar ? new Date(d.tanggal_daftar).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '–';
-      var wa = (d.whatsapp||'').replace(/\D/g,'');
-      var paket = (d.paket||'Belum dipilih').split('–')[0].trim();
-      return '<tr>'+
-        '<td class="td-num">'+String(i+1).padStart(2,'0')+'</td>'+
-        '<td class="td-nama">'+( d.nama||'–')+'</td>'+
-        '<td class="td-wa"><a href="https://wa.me/'+wa+'" target="_blank">'+( d.whatsapp||'–')+'</a></td>'+
-        '<td><span class="paket-tag">'+paket+'</span></td>'+
-        '<td class="td-sub">'+(d.jumlah_jamaah||'–')+'</td>'+
-        '<td class="td-pesan" title="'+(d.pesan||'')+'">'+(d.pesan||'–')+'</td>'+
-        '<td class="td-date">'+tgl+'</td>'+
-      '</tr>';
-    }).join('');
+      var pc = {};
+      data.forEach(function(d){ var p=(d.paket||'Belum dipilih').split('–')[0].trim(); pc[p]=(pc[p]||0)+1; });
+      var top = Object.keys(pc).sort(function(a,b){return pc[b]-pc[a];})[0];
+      if (top) { document.getElementById('sPaket').textContent = top; document.getElementById('sPaketSub').textContent = pc[top]+' pendaftar'; }
 
-    document.getElementById('tableWrap').innerHTML =
-      '<table><thead><tr><th>#</th><th>Nama</th><th>WhatsApp</th><th>Paket</th><th>Jamaah</th><th>Pesan</th><th>Tanggal</th></tr></thead><tbody>'+rows+'</tbody></table>';
+      if (!data.length) { document.getElementById('tableWrap').innerHTML = '<div class="state">// belum ada data pendaftar</div>'; return; }
+
+      var rows = data.map(function(d,i){
+        var tgl = d.tanggal_daftar ? new Date(d.tanggal_daftar).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '–';
+        var wa = (d.whatsapp||'').replace(/\D/g,'');
+        var paket = (d.paket||'Belum dipilih').split('–')[0].trim();
+        return '<tr>'+
+          '<td class="td-num">'+String(i+1).padStart(2,'0')+'</td>'+
+          '<td class="td-nama">'+(d.nama||'–')+'</td>'+
+          '<td class="td-wa"><a href="https://wa.me/'+wa+'" target="_blank">'+(d.whatsapp||'–')+'</a></td>'+
+          '<td><span class="paket-tag">'+paket+'</span></td>'+
+          '<td class="td-sub">'+(d.jumlah_jamaah||'–')+'</td>'+
+          '<td class="td-pesan" title="'+(d.pesan||'')+'">'+(d.pesan||'–')+'</td>'+
+          '<td class="td-date">'+tgl+'</td>'+
+        '</tr>';
+      }).join('');
+
+      document.getElementById('tableWrap').innerHTML =
+        '<table><thead><tr><th>#</th><th>Nama</th><th>WhatsApp</th><th>Paket</th><th>Jamaah</th><th>Pesan</th><th>Tanggal</th></tr></thead><tbody>'+rows+'</tbody></table>';
+
+    } catch(e) {
+      document.getElementById('tableWrap').innerHTML = '<div class="state">// error: ' + e.message + '</div>';
+    }
   }
 </script>
 </body>
